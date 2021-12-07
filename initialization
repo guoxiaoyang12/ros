@@ -1,0 +1,41 @@
+//ros init method
+//method 1
+ros::init(argc, argv, "my_node_name"); or
+ros::init(argc, argv, "my_node_name", ros::init_options::AnonymousName);
+
+//main form of it
+void ros::init(<command line or remapping arguments>, std::string node_name, uint32_t options);
+
+//translation
+argc and argv  :  ROS uses these to parse remapping arguments from the command line.
+node_name    :   Node names must be unique across the ROS system
+option   : ros::init_options::NoSigintHandler
+
+                Don't install a SIGINT handler. You should install your own SIGINT handler in this case, to ensure that the node gets shutdown correctly when it exits. Note that the default action for SIGINT tends to be to terminate the process, so if you want to do your own SIGTERM handling you will also have to use this option. 
+
+            ros::init_options::AnonymousName
+
+                Anonymize the node name. Adds a random number to the end of your node's name, to make it unique. 
+
+             ros::init_options::NoRosout
+
+                  Don't broadcast rosconsole output to the /rosout topic. 
+                  
+                  
+                  
+                  
+                 
+ros::NodeHandle nh; 
+
+//When the first ros::NodeHandle is created it will call ros::start(), 
+and when the last ros::NodeHandle is destroyed, it will call ros::shutdown().
+
+If you want to manually manage the lifetime of the node you may call ros::start() yourself, 
+in which case you should call ros::shutdown() before your program exits. 
+
+ros::shutdown()
+Once ros::ok() returns false, the node has finished shutting down. A common use of ros::ok(): 
+
+
+custom SIGNIT Handler
+      
