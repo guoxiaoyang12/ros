@@ -1,0 +1,57 @@
+//usage
+package_name/msg/Foo.msg → package_name::Foo
+std_msgs::String str;
+
+// The header files are generated with the same name as the filename of the msg/srv. 
+#include <std_msgs/String.h>
+
+
+
+//normal publish
+ros::Publisher pub = nh.advertise<std_msgs::String>("topic_name", 5);
+std_msgs::String str;
+str.data = "hello world";
+pub.publish(str);
+
+//   if the publisher is empty?
+   1 if (!pub)
+   2 {
+   3 ...
+   4 }
+
+//Ptr publish   publisher and subscriber to the same topic both exist inside the same node
+ros::Publisher pub = nh.advertise<std_msgs::String>("topic_name", 5);
+std_msgs::StringPtr str(new std_msgs::String);
+str->data = "hello world";
+pub.publish(str);
+
+template<class M>
+ros::Publisher advertise(const std::string& topic, uint32_t queue_size, bool latch = false);
+
+latch:  在连接上启用“锁存”。当连接被锁定时，发布的最后一条消息将被保存并自动发送到连接的任何未来订阅者。这对于缓慢更改为静态数据(如地图)很有用
+
+ros::Publisher implements the ==, != and < operators, and it is possible to use them in std::map, std::set, etc. 
+You can retrieve the topic of a publisher with the ros::Publisher::getTopic() method. 
+
+
+Subscribing to a Topic
+
+
+//main usage
+void callback(const std_msgs::StringConstPtr& str)
+{
+...
+}
+...
+ros::Subscriber sub = nh.subscribe("my_topic", 1, callback);
+
+
+//template
+template<class M>
+ros::Subscriber subscribe(const std::string& topic, 
+                          uint32_t queue_size,
+                          <callback, which may involve multiple arguments>, 
+                          const ros::TransportHints& transport_hints = ros::TransportHints());
+
+
+
